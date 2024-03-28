@@ -11,6 +11,11 @@ const styles = StyleSheet.create({
 
 export default function LoginPage() {
   const router = useRouter();
+
+  function redirectToRegisterPage() {
+    router.navigate("/(auth)/register");
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <YStack>
@@ -32,12 +37,12 @@ export default function LoginPage() {
           <Button marginTop={"$5"}>Login</Button>
         </YStack>
         <YStack marginTop={"$5"} gap="$3" alignItems="center">
-          <Text>
-            Don't have an account yet?{" "}
-            <TouchableOpacity>
-              <Text>Sign Up</Text>
+          <XStack>
+            <Text>Don't have an account yet?</Text>
+            <TouchableOpacity onPress={redirectToRegisterPage}>
+              <Text marginLeft={"$1"}>Sign Up</Text>
             </TouchableOpacity>
-          </Text>
+          </XStack>
           <TouchableOpacity>
             <Text>Forget Password</Text>
           </TouchableOpacity>
