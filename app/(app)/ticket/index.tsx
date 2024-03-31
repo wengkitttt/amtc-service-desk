@@ -1,10 +1,10 @@
 import { SafeAreaView } from "react-native";
 import { Text } from "tamagui";
 
-export default function AppPage() {
+export default function TicketPage() {
   return (
     <SafeAreaView>
-      <Text>App Page</Text>
+      <Text>Ticket Page</Text>
     </SafeAreaView>
   );
 }
