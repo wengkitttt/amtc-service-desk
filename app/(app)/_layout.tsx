@@ -16,7 +16,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="ticket/index"
         options={{
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color }) => <Ticket size={"$2"} color={color} />,
         }}
       />
