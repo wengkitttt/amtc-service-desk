@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import { FlatList, SafeAreaView } from "react-native";
 import { Button, Text, View, XStack } from "tamagui";
 import { TicketContainer } from "../../../models/ticket";
+import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 
@@ -37,7 +38,8 @@ const mockTicketContainers: TicketContainer[] = [
 ];
 
 export default function TicketPage() {
-  const [tickets, setTickets] = useState<TicketContainer[]>(mockTicketContainers);
+  const [tickets, setTickets] =
+    useState<TicketContainer[]>(mockTicketContainers);
 
   function renderTicketContainer(ticket: TicketContainer) {
     return <View></View>;
