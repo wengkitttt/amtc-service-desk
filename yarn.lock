@@ -5275,6 +5275,7 @@ __metadata:
     "@types/react-native-get-random-values": "npm:^1"
     "@types/uuid": "npm:^9.0.8"
     babel-preset-expo: "npm:^10.0.1"
+    date-fns: "npm:^3.6.0"
     expo: "npm:^50.0.14"
     expo-font: "npm:~11.10.2"
     expo-linking: "npm:~6.2.1"
@@ -6531,6 +6532,13 @@ __metadata:
   version: 3.0.1
   resolution: "data-uri-to-buffer@npm:3.0.1"
   checksum: 10/c59c3009686a78c071806b72f4810856ec28222f0f4e252aa495ec027ed9732298ceea99c50328cf59b151dd34cbc3ad6150bbb43e41fc56fa19f48c99e9fc30
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "date-fns@npm:3.6.0"
+  checksum: 10/cac35c58926a3b5d577082ff2b253612ec1c79eb6754fddef46b6a8e826501ea2cb346ecbd211205f1ba382ddd1f9d8c3f00bf433ad63cc3063454d294e3a6b8
   languageName: node
   linkType: hard
 

@@ -25,6 +25,7 @@
     "@tamagui/metro-plugin": "^1.93.3",
     "@types/uuid": "^9.0.8",
     "babel-preset-expo": "^10.0.1",
+    "date-fns": "^3.6.0",
     "expo": "^50.0.14",
     "expo-font": "~11.10.2",
     "expo-linking": "~6.2.1",

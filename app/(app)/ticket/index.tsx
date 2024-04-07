@@ -1,69 +1,117 @@
-import { Plus, Search } from "@tamagui/lucide-icons";
+import { ListFilter, Plus, Search } from "@tamagui/lucide-icons";
 import { Tabs } from "expo-router";
-import { FlatList, SafeAreaView } from "react-native";
-import { Button, Text, View, XStack } from "tamagui";
-import { TicketContainer } from "../../../models/ticket";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
+import { Circle, Text, View, XStack, YStack } from "tamagui";
+import { TicketContainerModel } from "../../../models/ticket";
 
-const mockTicketContainers: TicketContainer[] = [
-  {
-    id: uuidv4(),
-    code: "TC001",
-    title: "Bug Fixing",
-    status: "Open",
-    urgentLevel: "High",
-    createBy: "John Doe",
-    createDate: new Date("2024-04-01T08:00:00"),
-  },
-  {
-    id: uuidv4(),
-    code: "TC002",
-    title: "Feature Enhancement",
-    status: "In Progress",
-    urgentLevel: "Medium",
-    createBy: "Jane Smith",
-    createDate: new Date("2024-04-02T10:30:00"),
-  },
-  {
-    id: uuidv4(),
-    code: "TC003",
-    title: "UI Improvement",
-    status: "Closed",
-    urgentLevel: "Low",
-    createBy: "Alice Johnson",
-    createDate: new Date("2024-04-03T14:45:00"),
-  },
-];
+import { useState } from "react";
+import { format } from "date-fns";
+import { mockTicketContainers } from "../../../dummy/ticket";
+import TicketDashboard from "../../../components/ticket-page/TicketDashboard";
+import SearchBox from "../../../components/general/SearchBox";
 
 export default function TicketPage() {
-  const [tickets, setTickets] =
-    useState<TicketContainer[]>(mockTicketContainers);
+  const [masterTickets, setMasterTickets] = useState<TicketContainerModel[]>(
+    mockTicketContainers as TicketContainerModel[]
+  );
 
-  function renderTicketContainer(ticket: TicketContainer) {
-    return <View></View>;
+  const [tickets, setTickets] = useState<TicketContainerModel[]>(
+    mockTicketContainers as TicketContainerModel[]
+  );
+
+  function searchTicketList(term: string) {
+    if (!term) {
+      setTickets(masterTickets);
+    }
+
+    const searchTerm = term.toLowerCase().replace(/\s/g, "");
+
+    const filteredTicketList = masterTickets.filter((item) => {
+      const codeMatch = item.code.toLowerCase().replace(/\s/g, "").includes(searchTerm);
+      const titleMatch = item.title.toLowerCase().replace(/\s/g, "").includes(searchTerm);
+      const createByMatch = item.createBy.toLowerCase().replace(/\s/g, "").includes(searchTerm);
+
+      return codeMatch || titleMatch || createByMatch;
+    });
+    setTickets(filteredTicketList);
+  }
+
+  function renderTicketContainer(ticket: TicketContainerModel) {
+    const { id, code, status, title, createBy, createDate, urgentLevel } = ticket;
+    return (
+      <View
+        paddingHorizontal="$1.5"
+        borderColor="#E0E0E0"
+        borderBottomWidth="$0.5"
+        paddingTop="$4"
+        paddingBottom="$4"
+        key={id}>
+        <XStack justifyContent="space-between">
+          <XStack gap={"$3"}>
+            <YStack justifyContent="center">
+              {urgentLevel == "High" ? (
+                <Circle size={10} backgroundColor={"$red9"} />
+              ) : urgentLevel == "Medium" ? (
+                <Circle size={10} backgroundColor="$orange9" />
+              ) : (
+                <Circle size={10} backgroundColor="$green9" />
+              )}
+            </YStack>
+            <YStack gap={"$1.5"}>
+              <XStack gap={"$2"}>
+                <Text>#{code}</Text>
+                <Text>|</Text>
+                <Text>{status}</Text>
+              </XStack>
+              <XStack>
+                <Text>{title}</Text>
+              </XStack>
+            </YStack>
+          </XStack>
+
+          <YStack gap={"$1.5"}>
+            <XStack justifyContent={"flex-end"}>
+              <Text>{createBy}</Text>
+            </XStack>
+            <XStack>
+              <Text>{format(createDate, "dd/MM/yyyy hh:mmaaa")}</Text>
+            </XStack>
+          </YStack>
+        </XStack>
+      </View>
+    );
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <Tabs.Screen
         options={{
           headerTitle: "",
-          headerLeft: () => <Text>Ticket Management</Text>,
+          headerLeft: () => (
+            <Text fontSize={"$5"} marginLeft="$2">
+              Ticket Management
+            </Text>
+          ),
           headerRight: () => (
-            <XStack gap={"$2"}>
-              <Button chromeless icon={Search}></Button>
-              <Button chromeless icon={Plus}></Button>
+            <XStack gap={"$2"} marginRight="$2">
+              <TouchableOpacity>
+                <Plus />
+              </TouchableOpacity>
             </XStack>
           ),
         }}
       />
-      <FlatList
-        data={tickets}
-        renderItem={({ item }) => renderTicketContainer(item)}
-        keyExtractor={(item) => item.id}
-      />
+      <TicketDashboard />
+      <XStack gap="$4" marginBottom="$2">
+        <SearchBox size="$3" searchFunction={searchTicketList} />
+        <TouchableOpacity style={{ alignSelf: "center" }}>
+          <ListFilter />
+        </TouchableOpacity>
+      </XStack>
+
+      <ScrollView>
+        <YStack gap={"$2"}>{tickets.map((item) => renderTicketContainer(item))}</YStack>
+      </ScrollView>
     </SafeAreaView>
   );
 }

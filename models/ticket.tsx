@@ -1,4 +1,4 @@
-export interface TicketContainer {
+export interface TicketContainerModel {
   id: string;
   code: string;
   title: string;
@@ -6,4 +6,9 @@ export interface TicketContainer {
   urgentLevel: string;
   createBy: string;
   createDate: Date;
+}
+
+export interface TicketNumberBoxModel {
+  count: number;
+  title: string;
 }

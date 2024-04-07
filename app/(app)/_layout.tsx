@@ -3,21 +3,21 @@ import { Ticket, LayoutDashboard } from "@tamagui/lucide-icons";
 
 export default function AppLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "blue" }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: "white" }}>
       <Tabs.Screen
         name="index"
         options={{
+          title: "",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <LayoutDashboard size={"$2"} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <LayoutDashboard marginTop={"$3"} size={"$2"} color={color} />,
         }}
       />
       <Tabs.Screen
         name="ticket/index"
         options={{
+          title: "",
           headerShown: true,
-          tabBarIcon: ({ color }) => <Ticket size={"$2"} color={color} />,
+          tabBarIcon: ({ color }) => <Ticket marginTop={"$3"} size={"$2"} color={color} />,
         }}
       />
     </Tabs>
