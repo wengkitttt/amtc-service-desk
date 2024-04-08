@@ -22,6 +22,7 @@ export default function TicketPage() {
   function searchTicketList(term: string) {
     if (!term) {
       setTickets(masterTickets);
+      return;
     }
 
     const searchTerm = term.toLowerCase().replace(/\s/g, "");
@@ -33,6 +34,19 @@ export default function TicketPage() {
 
       return codeMatch || titleMatch || createByMatch;
     });
+    setTickets(filteredTicketList);
+  }
+
+  function filterTicketList(type: string) {
+    const upperCaseType = type.toUpperCase();
+    if (type == "ALL") {
+      setTickets(masterTickets);
+      return;
+    }
+
+    const filteredTicketList = masterTickets.filter(
+      (item) => item.status.toUpperCase() == upperCaseType
+    );
     setTickets(filteredTicketList);
   }
 
@@ -101,7 +115,7 @@ export default function TicketPage() {
           ),
         }}
       />
-      <TicketDashboard />
+      <TicketDashboard filterFunction={filterTicketList} />
       <XStack gap="$4" marginBottom="$2">
         <SearchBox size="$3" searchFunction={searchTicketList} />
         <TouchableOpacity style={{ alignSelf: "center" }}>

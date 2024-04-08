@@ -1,5 +1,6 @@
 import { View, XStack, YStack, Text } from "tamagui";
 import { TicketNumberBoxModel } from "../../models/ticket";
+import { TouchableOpacity } from "react-native";
 
 function TicketNumberBox({ count, title }: TicketNumberBoxModel) {
   return (
@@ -20,7 +21,7 @@ function TicketNumberBox({ count, title }: TicketNumberBoxModel) {
   );
 }
 
-function TicketDashboard() {
+function TicketDashboard(props: { filterFunction: (arg0: string) => void }) {
   const total: TicketNumberBoxModel = {
     count: 100,
     title: "All",
@@ -43,10 +44,18 @@ function TicketDashboard() {
   return (
     <View paddingTop="$5" paddingBottom="$5">
       <XStack justifyContent="space-evenly">
-        <TicketNumberBox {...total} />
-        <TicketNumberBox {...open} />
-        <TicketNumberBox {...closed} />
-        <TicketNumberBox {...onHold} />
+        <TouchableOpacity onPress={() => props.filterFunction("ALL")}>
+          <TicketNumberBox {...total} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.filterFunction("OPEN")}>
+          <TicketNumberBox {...open} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.filterFunction("CLOSED")}>
+          <TicketNumberBox {...closed} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.filterFunction("ONHOLD")}>
+          <TicketNumberBox {...onHold} />
+        </TouchableOpacity>
       </XStack>
     </View>
   );
