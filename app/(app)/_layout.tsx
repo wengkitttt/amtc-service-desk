@@ -13,10 +13,10 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="ticket/index"
+        name="ticket"
         options={{
           title: "",
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color }) => <Ticket marginTop={"$3"} size={"$2"} color={color} />,
         }}
       />

@@ -1,5 +1,5 @@
 import { ListFilter, Plus, Search } from "@tamagui/lucide-icons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
 import { Circle, Text, View, XStack, YStack } from "tamagui";
 import { TicketContainerModel } from "../../../models/ticket";
@@ -11,6 +11,7 @@ import TicketDashboard from "../../../components/ticket-page/TicketDashboard";
 import SearchBox from "../../../components/general/SearchBox";
 
 export default function TicketPage() {
+  const router = useRouter();
   const [masterTickets, setMasterTickets] = useState<TicketContainerModel[]>(
     mockTicketContainers as TicketContainerModel[]
   );
@@ -108,7 +109,7 @@ export default function TicketPage() {
           ),
           headerRight: () => (
             <XStack gap={"$2"} marginRight="$2">
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push("/(app)/ticket/ticket-form")}>
                 <Plus />
               </TouchableOpacity>
             </XStack>
