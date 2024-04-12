@@ -1,33 +1,38 @@
-import { Stack, Tabs, useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { Stack, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
-import {
-  Button,
-  Form,
-  Input,
-  Label,
-  ScrollView,
-  Text,
-  TextArea,
-  View,
-  XStack,
-  YStack,
-} from "tamagui";
+import { Input, Label, ScrollView, Text, TextArea, XStack, YStack } from "tamagui";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TicketFormModel } from "../../../models/ticket";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { SelectDropDown } from "../../../components/general/SelectDropDown";
+import { DataListModel, SelectDropDown } from "../../../components/general/SelectDropDown";
 
 type Props = {
   mode: string;
   ticketCode?: string;
 };
 
+const statusList: DataListModel[] = [
+  { id: 1, label: "Open", value: "Open" },
+  { id: 2, label: "Closed", value: "Closed" },
+  { id: 3, label: "On Hold", value: "On Hold" },
+];
+
+const priorityList: DataListModel[] = [
+  { id: 1, label: "High", value: "High" },
+  { id: 2, label: "Medium", value: "Medium" },
+  { id: 3, label: "Low", value: "Low" },
+];
+
 export default function TicketForm({ mode = "Add", ticketCode }: Props) {
   const [modalHeader, setModalHeader] = useState("Add Ticket");
   const [actionName, setActionName] = useState("Add");
   const router = useRouter();
-  const { control, register, handleSubmit } = useForm<TicketFormModel>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TicketFormModel>();
   const onSubmit: SubmitHandler<TicketFormModel> = (data) => console.log(data);
 
   useEffect(() => {
@@ -80,15 +85,57 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
               <Label width={110}>
                 <Text color={"red"}>*</Text> Name:
               </Label>
-              <Input flex={1} {...register("customerName")} />
+              <YStack flex={1}>
+                <Controller
+                  control={control}
+                  name="customerName"
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      flex={1}
+                      placeholder="Customer Name..."
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                />
+                {errors.customerName && <Text color="red">This is required.</Text>}
+              </YStack>
             </XStack>
             <XStack>
               <Label width={110}>Email:</Label>
-              <Input flex={1} {...register("customerEmail")} />
+              <Controller
+                control={control}
+                name="customerEmail"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    flex={1}
+                    placeholder="Customer Email..."
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
             </XStack>
             <XStack>
               <Label width={110}>Phone:</Label>
-              <Input flex={1} {...register("customerContactNumber")} />
+              <Controller
+                control={control}
+                name="customerContactNumber"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    flex={1}
+                    placeholder="Customer Phone..."
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
             </XStack>
           </YStack>
           <YStack gap="$3">
@@ -97,29 +144,80 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
               <Label width={110}>
                 <Text color={"red"}>*</Text> Subject:
               </Label>
-              <Input flex={1} {...register("ticketSubject")} />
+              <YStack flex={1}>
+                <Controller
+                  control={control}
+                  name="ticketSubject"
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      flex={1}
+                      placeholder="Ticket Subject..."
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                />
+                {errors.ticketSubject && <Text color="red">This is required.</Text>}
+              </YStack>
             </XStack>
             <XStack>
               <Label width={110}>Description:</Label>
-              <TextArea flex={1} {...register("ticketDescription")} />
+              <Controller
+                control={control}
+                name="ticketDescription"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextArea
+                    flex={1}
+                    placeholder="Ticket Description..."
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
             </XStack>
             <XStack>
               <Label width={110}>Status:</Label>
-              <SelectDropDown {...register("status")} />
+              <Controller
+                control={control}
+                name="status"
+                render={({ field: { onChange, value } }) => (
+                  <SelectDropDown
+                    dataList={statusList}
+                    selectProps={{ onValueChange: onChange, value }}
+                  />
+                )}
+              />
             </XStack>
             <XStack>
               <Label width={110}>Priority:</Label>
-              <SelectDropDown {...register("ticketPriority")} />
+              <Controller
+                control={control}
+                name="ticketPriority"
+                render={({ field: { onChange, value } }) => (
+                  <SelectDropDown
+                    dataList={priorityList}
+                    selectProps={{ onValueChange: onChange, value }}
+                  />
+                )}
+              />
             </XStack>
             <XStack>
               <Label width={110}>Estimated Date:</Label>
               <Controller
                 name="estimateStartDate"
                 control={control}
-                render={({ field: { value } }) => (
+                render={({ field: { onChange, value } }) => (
                   <RNDateTimePicker
                     style={{ flex: 1 }}
-                    value={value || new Date()} // Provide a default value if value is empty
+                    onChange={(value) => {
+                      onChange(new Date(value.nativeEvent.timestamp));
+                    }}
+                    value={value || new Date()}
                   />
                 )}
               />
@@ -129,10 +227,13 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
               <Controller
                 name="estimateEndDate"
                 control={control}
-                render={({ field: { value } }) => (
+                render={({ field: { onChange, value } }) => (
                   <RNDateTimePicker
                     style={{ flex: 1 }}
-                    value={value || new Date()} // Provide a default value if value is empty
+                    onChange={(value) => {
+                      onChange(new Date(value.nativeEvent.timestamp));
+                    }}
+                    value={value || new Date()}
                   />
                 )}
               />
@@ -142,10 +243,13 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
               <Controller
                 name="actualStartDate"
                 control={control}
-                render={({ field: { value } }) => (
+                render={({ field: { onChange, value } }) => (
                   <RNDateTimePicker
                     style={{ flex: 1 }}
-                    value={value || new Date()} // Provide a default value if value is empty
+                    onChange={(value) => {
+                      onChange(new Date(value.nativeEvent.timestamp));
+                    }}
+                    value={value || new Date()}
                   />
                 )}
               />
@@ -155,17 +259,32 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
               <Controller
                 name="actualEndDate"
                 control={control}
-                render={({ field: { value } }) => (
+                render={({ field: { onChange, value } }) => (
                   <RNDateTimePicker
                     style={{ flex: 1 }}
-                    value={value || new Date()} // Provide a default value if value is empty
+                    onChange={(value) => {
+                      onChange(new Date(value.nativeEvent.timestamp));
+                    }}
+                    value={value || new Date()}
                   />
                 )}
               />
             </XStack>
             <XStack>
               <Label width={110}>Remark:</Label>
-              <TextArea flex={1} {...register("ticketRemark")} />
+              <Controller
+                control={control}
+                name="ticketRemark"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextArea
+                    flex={1}
+                    placeholder="Ticket Remark..."
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
             </XStack>
           </YStack>
         </YStack>
