@@ -27,6 +27,7 @@ const priorityList: DataListModel[] = [
 export default function TicketForm({ mode = "Add", ticketCode }: Props) {
   const [modalHeader, setModalHeader] = useState("Add Ticket");
   const [actionName, setActionName] = useState("Add");
+
   const router = useRouter();
   const {
     control,
@@ -65,13 +66,13 @@ export default function TicketForm({ mode = "Add", ticketCode }: Props) {
         options={{
           headerTitle: modalHeader,
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity style={{ padding: 10 }} onPress={() => router.back()}>
               <Text>Cancel</Text>
             </TouchableOpacity>
           ),
           headerRight: () =>
             mode != "View" && (
-              <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+              <TouchableOpacity style={{ padding: 10 }} onPress={handleSubmit(onSubmit)}>
                 <Text>{actionName}</Text>
               </TouchableOpacity>
             ),

@@ -109,7 +109,9 @@ export default function TicketPage() {
           ),
           headerRight: () => (
             <XStack gap={"$2"} marginRight="$2">
-              <TouchableOpacity onPress={() => router.push("/(app)/ticket/ticket-form")}>
+              <TouchableOpacity
+                style={{ padding: 10 }}
+                onPress={() => router.push("/(app)/ticket/ticket-form")}>
                 <Plus />
               </TouchableOpacity>
             </XStack>
